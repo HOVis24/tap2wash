@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:tap2wash/contact_us.dart';
-import 'package:tap2wash/home_faqs.dart';
+import 'package:tap2wash/pages/contact_us.dart';
+import 'package:tap2wash/pages/home_faqs.dart';
 import 'package:tap2wash/main.dart';
-import 'package:tap2wash/payment_options.dart';
-import 'package:tap2wash/user_profile.dart';
-import 'package:tap2wash/user_settings.dart';
+import 'package:tap2wash/pages/my_washers.dart';
+import 'package:tap2wash/pages/payment_options.dart';
+import 'package:tap2wash/pages/user_profile.dart';
+import 'package:tap2wash/pages/user_settings.dart';
+import 'package:tap2wash/pages/my_washers.dart';
 
-import '../booking_history.dart';
+import '../pages/booking_history.dart';
 
 class SideBar extends StatelessWidget {
   @override
@@ -138,6 +140,37 @@ class SideBar extends StatelessWidget {
                         builder: (context) => const paymentOptions(
                               title: 'Tap2Wash',
                             )));
+                  },
+                ),
+              ),
+            ]),
+            const Divider(
+              color: Colors.black,
+            ),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Container(
+                alignment: Alignment.center,
+                width: 200,
+                child: ListTile(
+                  iconColor: Colors.white,
+                  dense: true,
+                  leading: const Icon(Icons.wash),
+                  title: const Text(
+                    'WASHERS',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        decoration: TextDecoration.none,
+                        fontFamily: 'Palanquin',
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        fontSize: 15),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const myWashers(
+                          title: 'Tap2Wash',
+                        )));
                   },
                 ),
               ),

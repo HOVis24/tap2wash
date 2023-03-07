@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tap2wash/edit_payment.dart';
+import 'package:tap2wash/pages/edit_payment.dart';
 
 class HomePaymentOptions extends StatefulWidget {
   const HomePaymentOptions(

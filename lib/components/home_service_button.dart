@@ -1,4 +1,11 @@
+import 'dart:ui';
+import 'dart:ui';
+
+import 'package:flutter/animation.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 
 class HomeServiceButton extends StatefulWidget {
   const HomeServiceButton(
@@ -33,26 +40,14 @@ class _HomeServiceButtonState extends State<HomeServiceButton> {
               width: 1.0,
             ),
           ),
-          color: const Color.fromRGBO(224, 251, 252, 1),
+          color: widget.selected ?
+          Color.fromRGBO(187, 196, 255, 1.0) : Color.fromRGBO(224, 251, 252, 1),
           child: SizedBox(
               width: 165,
               height: 125,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      widget.selected
-                          ? Icon(Icons.check_box_rounded)
-                          : Icon(Icons.check_box_outline_blank_rounded),
-                      SizedBox(
-                        width: 10,
-                      )
-                    ],
-                  ),
                   widget.icon,
                   Text(
                     widget.title,

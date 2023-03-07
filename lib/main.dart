@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:tap2wash/pick_car.dart';
+import 'package:tap2wash/pages/carwash_feedback.dart';
+import 'package:tap2wash/pages/carwash_profile.dart';
+import 'package:tap2wash/pages/pick_car.dart';
 
 import 'components/home_service_button.dart';
 import 'components/sidebar.dart';
+import 'model/CartModel.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp( const MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -84,6 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
           summary: 'Lorem IO'),
     ];
     return Scaffold(
+
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
@@ -113,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Column(
                 children: <Widget>[
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
                   const Text(
                     'What can we do for you today?',
                     style: TextStyle(
