@@ -1,0 +1,275 @@
+import 'package:flutter/material.dart';
+import 'package:tap2wash/contact_us.dart';
+import 'package:tap2wash/home_faqs.dart';
+import 'package:tap2wash/main.dart';
+import 'package:tap2wash/payment_options.dart';
+import 'package:tap2wash/user_profile.dart';
+import 'package:tap2wash/user_settings.dart';
+
+import '../booking_history.dart';
+
+class SideBar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+        backgroundColor: const Color.fromRGBO(49, 185, 228, 1),
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  alignment: Alignment.topLeft,
+                  width: 200,
+                  child: const UserAccountsDrawerHeader(
+                    accountName: Text(
+                      'Juan F. Dela Cruz',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          decoration: TextDecoration.none,
+                          fontFamily: 'Palanquin',
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                          fontSize: 20),
+                    ),
+                    accountEmail: Text(
+                      '+639227392730',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          decoration: TextDecoration.none,
+                          fontFamily: 'Palanquin',
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                          fontSize: 15),
+                    ),
+                    currentAccountPicture: CircleAvatar(
+                      backgroundColor: Colors.orange,
+                    ),
+                    decoration:
+                        BoxDecoration(color: Color.fromRGBO(49, 185, 228, 1)),
+                  ),
+                )
+              ],
+            ),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Container(
+                alignment: Alignment.center,
+                width: 200,
+                child: ListTile(
+                  iconColor: Colors.white,
+                  dense: true,
+                  leading: const Icon(Icons.home),
+                  title: const Text(
+                    'HOME',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        decoration: TextDecoration.none,
+                        fontFamily: 'Palanquin',
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        fontSize: 15),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const MyHomePage(
+                              title: 'Tap2Wash',
+                            )));
+                  },
+                ),
+              ),
+            ]),
+            const Divider(
+              color: Colors.black,
+            ),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Container(
+                alignment: Alignment.center,
+                width: 200,
+                child: ListTile(
+                  iconColor: Colors.white,
+                  dense: true,
+                  leading: const Icon(Icons.verified_user),
+                  title: const Text(
+                    'EDIT PROFILE',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        decoration: TextDecoration.none,
+                        fontFamily: 'Palanquin',
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        fontSize: 15),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const userProfile(
+                              title: 'Tap2Wash',
+                            )));
+                  },
+                ),
+              ),
+            ]),
+            const Divider(
+              color: Colors.black,
+            ),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Container(
+                alignment: Alignment.center,
+                width: 200,
+                child: ListTile(
+                  iconColor: Colors.white,
+                  dense: true,
+                  leading: const Icon(Icons.wallet),
+                  title: const Text(
+                    'PAYMENT',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        decoration: TextDecoration.none,
+                        fontFamily: 'Palanquin',
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        fontSize: 15),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const paymentOptions(
+                              title: 'Tap2Wash',
+                            )));
+                  },
+                ),
+              ),
+            ]),
+            const Divider(
+              color: Colors.black,
+            ),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Container(
+                alignment: Alignment.center,
+                width: 200,
+                child: ListTile(
+                  iconColor: Colors.white,
+                  dense: true,
+                  leading: const Icon(Icons.sticky_note_2),
+                  title: const Text(
+                    'BOOKINGS',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        decoration: TextDecoration.none,
+                        fontFamily: 'Palanquin',
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        fontSize: 15),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const bookingHistory(
+                              title: 'Tap2Wash',
+                            )));
+                  },
+                ),
+              ),
+            ]),
+            const Divider(
+              color: Colors.black,
+            ),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Container(
+                alignment: Alignment.center,
+                width: 200,
+                child: ListTile(
+                  iconColor: Colors.white,
+                  dense: true,
+                  leading: const Icon(Icons.settings),
+                  title: const Text(
+                    'SETTINGS',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        decoration: TextDecoration.none,
+                        fontFamily: 'Palanquin',
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        fontSize: 15),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const userSettings(
+                              title: 'Tap2Wash',
+                            )));
+                  },
+                ),
+              ),
+            ]),
+            const Divider(
+              color: Colors.black,
+            ),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Container(
+                alignment: Alignment.center,
+                width: 200,
+                child: ListTile(
+                  iconColor: Colors.white,
+                  dense: true,
+                  leading: const Icon(Icons.contact_phone),
+                  title: const Text(
+                    'CONTACT US',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        decoration: TextDecoration.none,
+                        fontFamily: 'Palanquin',
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        fontSize: 15),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const contactUs(
+                              title: 'Tap2Wash',
+                            )));
+                  },
+                ),
+              ),
+            ]),
+            const Divider(
+              color: Colors.black,
+            ),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Container(
+                alignment: Alignment.center,
+                width: 200,
+                child: ListTile(
+                  iconColor: Colors.white,
+                  dense: true,
+                  leading: const Icon(Icons.question_mark_rounded),
+                  title: const Text(
+                    'FAQs',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        decoration: TextDecoration.none,
+                        fontFamily: 'Palanquin',
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        fontSize: 15),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const homeFaqs(
+                              title: 'Tap2Wash',
+                            )));
+                  },
+                ),
+              ),
+            ]),
+            const Divider(
+              color: Colors.black,
+            ),
+          ],
+        ));
+  }
+}
