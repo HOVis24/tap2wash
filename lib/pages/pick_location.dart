@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:tap2wash/app_state_model.dart';
 import 'package:tap2wash/main.dart';
 import 'package:tap2wash/pages/pick_date.dart';
-
+import 'package:place_picker/place_picker.dart';
 import '../components/sidebar.dart';
+import 'package:provider/provider.dart';
 
 class picKLocation extends StatelessWidget {
   const picKLocation({super.key});
@@ -33,8 +35,29 @@ class _pickLocation extends State<pickLocation> {
   late MediaQueryData queryData;
 
   @override
+  void initState() {
+    super.initState();
+    var model = Provider.of<AppStateModel>(context, listen: false);
+  }
+
+  @override
   Widget build(BuildContext context) {
     queryData = MediaQuery.of(context);
+    var locInput = TextEditingController();
+    dynamic customLocation = locInput;
+
+
+    return Consumer<AppStateModel>(builder: (context, model, child){
+
+      void showPlacePicker() async {
+        LocationResult? result = await Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => PlacePicker("AIzaSyDiwjpaj_nJk_b2Lln0w3onLIw8U_PvbFo", )));
+        print(result!.formattedAddress.toString());
+        print(result.latLng.toString());
+        locInput.text = result.formattedAddress.toString();
+        model.setAddress(pickedAddress: locInput.text);
+      }
+
     return Scaffold(
         appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
@@ -82,61 +105,97 @@ class _pickLocation extends State<pickLocation> {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Card(
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //   children: <Widget>[
+                //     Card(
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(15.0),
+                //       ),
+                //       color: const Color.fromRGBO(244, 243, 243, 1),
+                //       child: SizedBox(
+                //           width: 355,
+                //           height: 40,
+                //           child: Row(
+                //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //             children: const <Widget>[
+                //               SizedBox(),
+                //               Icon(Icons.search_sharp),
+                //               SizedBox(),
+                //               Text(
+                //                 '2010 Piy Margal St., Sampaloc, Manila',
+                //                 textAlign: TextAlign.center,
+                //                 style: TextStyle(
+                //                     decoration: TextDecoration.none,
+                //                     fontFamily: 'Palanquin',
+                //                     fontWeight: FontWeight.w600,
+                //                     color: Colors.black,
+                //                     fontSize: 15),
+                //               ),
+                //               SizedBox(),
+                //             ],
+                //           )),
+                //     ),
+                //   ],
+                // ),
+                SizedBox(
+                  width: queryData.size.width - 30,
+                  height: 80,
+                  child: GestureDetector(
+                    child: Card(
+                      color: Colors.white,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
+                        side: BorderSide(color: Color.fromRGBO(226, 226, 226, 1)),
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      color: const Color.fromRGBO(244, 243, 243, 1),
-                      child: SizedBox(
-                          width: 355,
-                          height: 40,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: const <Widget>[
-                              SizedBox(),
-                              Icon(Icons.search_sharp),
-                              SizedBox(),
-                              Text(
-                                '2010 Piy Margal St., Sampaloc, Manila',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    decoration: TextDecoration.none,
-                                    fontFamily: 'Palanquin',
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black,
-                                    fontSize: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Icon(
+                            Icons.pin_drop_outlined,
+                            color: Color.fromRGBO(129, 129, 129, 1),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          SizedBox(
+                            width: 300,
+                            child: TextField(
+                              readOnly: true,
+                              controller: locInput,
+                              onTap: (){
+                                showPlacePicker();
+
+                                // setState(() {
+                                //   model.setAddress(pickedAddress: locInput.text);
+                                //   print(locInput);
+                                // });
+                              },
+
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText:  'Pickup Point:',
+                                  hintStyle: TextStyle(
+                                      color: Color.fromRGBO(129, 129, 129, 1),
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w300,
+                                      fontFamily: 'Lato-Thin'
+                                  )
                               ),
-                              SizedBox(),
-                            ],
-                          )),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                        side: const BorderSide(
-                          color: Colors.black,
-                          width: 0.5,
-                        ),
+                              style: TextStyle(
+                                  color: Color.fromRGBO(129, 129, 129, 1),
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.w300,
+                                  fontFamily: 'Lato-Thin'),
+                            ),
+                          ),
+                        ],
                       ),
-                      color: const Color.fromRGBO(244, 243, 243, 1),
-                      child: SizedBox(
-                          width: 380,
-                          height: 250,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: const <Widget>[],
-                          )),
                     ),
-                  ],
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Row(
@@ -188,5 +247,5 @@ class _pickLocation extends State<pickLocation> {
             ),
           ],
         ));
-  }
+  });}
 }

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:tap2wash/app_state_model.dart';
 import 'package:tap2wash/main.dart';
 import 'package:tap2wash/pages/pick_time.dart';
-
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import '../components/sidebar.dart';
+import 'package:provider/provider.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -31,10 +35,14 @@ class pickDate extends StatefulWidget {
 
 class _pickDateState extends State<pickDate> {
   late MediaQueryData queryData;
+  var dateInput = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     queryData = MediaQuery.of(context);
+    initializeDateFormatting();
+
+    return Consumer<AppStateModel>(builder: (context, model, child){
     return Scaffold(
         appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
@@ -82,67 +90,125 @@ class _pickDateState extends State<pickDate> {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    SizedBox(),
-                    SizedBox(),
-                    Icon(Icons.navigate_before_rounded, size: 50),
-                    Card(
+                SizedBox(
+                  width: queryData.size.width - 30,
+                  height: 80,
+                  child: GestureDetector(
+                    child: Card(
+                      color: Colors.white,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      color: const Color.fromRGBO(49, 185, 228, 1),
-                      child: SizedBox(
-                          width: 205,
-                          height: 50,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: const <Widget>[
-                              Text(
-                                'February 2023',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    decoration: TextDecoration.none,
-                                    fontFamily: 'Palanquin',
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white,
-                                    fontSize: 20),
+                          borderRadius: BorderRadius.circular(12),
+                          side: BorderSide(
+                              color: Color.fromRGBO(226, 226, 226, 1))),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Icon(
+                            Icons.calendar_month_sharp,
+                            color: Color.fromRGBO(129, 129, 129, 1),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          SizedBox(
+                            width: 150,
+                            child: TextField(
+                              readOnly: true,
+                              controller: dateInput,
+                              onTap: (){
+                                DatePicker.showDatePicker(context, showTitleActions: true, onConfirm: (date){
+                                  setState(() {
+                                    dateInput.text = DateFormat.yMd('en_US').format(date);
+                                     model.setDate(pickedDate: dateInput.text);
+                                  });
+                                });
+                              },
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText:  'Date of Departure:',
+                                  hintStyle: TextStyle(
+                                      color: Color.fromRGBO(129, 129, 129, 1),
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w300,
+                                      fontFamily: 'Lato-Thin'
+                                  )
                               ),
-                            ],
-                          )),
-                    ),
-                    Icon(
-                      Icons.navigate_next_rounded,
-                      size: 50,
-                    ),
-                    SizedBox(),
-                    SizedBox(),
-                  ],
-                ),
-                SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                        side: const BorderSide(
-                          color: Colors.black,
-                          width: 0.5,
-                        ),
+                              style: TextStyle(
+                                  color: Color.fromRGBO(129, 129, 129, 1),
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.w300,
+                                  fontFamily: 'Lato-Thin'),
+                            ),
+                          ),
+                        ],
                       ),
-                      color: const Color.fromRGBO(244, 243, 243, 1),
-                      child: SizedBox(
-                          width: 380,
-                          height: 250,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: const <Widget>[],
-                          )),
                     ),
-                  ],
+                  ),
                 ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //   children: <Widget>[
+                //     SizedBox(),
+                //     SizedBox(),
+                //     Icon(Icons.navigate_before_rounded, size: 50),
+                //     Card(
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(15.0),
+                //       ),
+                //       color: const Color.fromRGBO(49, 185, 228, 1),
+                //       child: SizedBox(
+                //           width: 205,
+                //           height: 50,
+                //           child: Row(
+                //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //             children: const <Widget>[
+                //               Text(
+                //                 'February 2023',
+                //                 textAlign: TextAlign.center,
+                //                 style: TextStyle(
+                //                     decoration: TextDecoration.none,
+                //                     fontFamily: 'Palanquin',
+                //                     fontWeight: FontWeight.w600,
+                //                     color: Colors.white,
+                //                     fontSize: 20),
+                //               ),
+                //             ],
+                //           )),
+                //     ),
+                //     Icon(
+                //       Icons.navigate_next_rounded,
+                //       size: 50,
+                //     ),
+                //     SizedBox(),
+                //     SizedBox(),
+                //   ],
+                // ),
+                // SizedBox(height: 10),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //   children: <Widget>[
+                //     Card(
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(15.0),
+                //         side: const BorderSide(
+                //           color: Colors.black,
+                //           width: 0.5,
+                //         ),
+                //       ),
+                //       color: const Color.fromRGBO(244, 243, 243, 1),
+                //       child: SizedBox(
+                //           width: 380,
+                //           height: 250,
+                //           child: Row(
+                //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //             children: const <Widget>[],
+                //           )),
+                //     ),
+                //   ],
+                // ),
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -192,5 +258,5 @@ class _pickDateState extends State<pickDate> {
             ),
           ],
         ));
-  }
+  });}
 }

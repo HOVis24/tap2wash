@@ -39,6 +39,11 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_rating_bar: ^4.0.1
   provider: ^6.0.0
+  flutter_datetime_picker: ^1.5.1
+  intl: ^0.18.0
+  place_picker: ^0.10.0
+  google_maps_flutter: ^2.2.5
+  google_maps_flutter_web: ^0.4.0+7
 
 dev_dependencies:
   flutter_test:

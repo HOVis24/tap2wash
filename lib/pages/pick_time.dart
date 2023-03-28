@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tap2wash/components/home_time_button.dart';
 import 'package:tap2wash/main.dart';
 import 'package:tap2wash/pages/pick_payment.dart';
 
+import '../app_state_model.dart';
 import '../components/sidebar.dart';
 
 class MyApp extends StatelessWidget {
@@ -35,12 +37,19 @@ class _pickTime extends State<pickTime> {
   int selectedIndex = 0;
 
   @override
+  void initState() {
+    super.initState();
+    var model = Provider.of<AppStateModel>(context, listen: false);
+  }
+
+  @override
   Widget build(BuildContext context) {
     queryData = MediaQuery.of(context);
-
+    return Consumer<AppStateModel>(builder: (context, model, child){
     List<Widget> list = [
       HomeTimeButton(
         onTap: () {
+          model.setTime(pickedTime:'9:00 AM');
           setState(() {
             selectedIndex = 0;
           });
@@ -50,6 +59,7 @@ class _pickTime extends State<pickTime> {
       ),
       HomeTimeButton(
         onTap: () {
+          model.setTime(pickedTime:'10:00 AM');
           setState(() {
             selectedIndex = 1;
           });
@@ -59,6 +69,7 @@ class _pickTime extends State<pickTime> {
       ),
       HomeTimeButton(
         onTap: () {
+          model.setTime(pickedTime:'11:00 AM');
           setState(() {
             selectedIndex = 2;
           });
@@ -68,6 +79,7 @@ class _pickTime extends State<pickTime> {
       ),
       HomeTimeButton(
         onTap: () {
+          model.setTime(pickedTime:'12:00 PM');
           setState(() {
             selectedIndex = 3;
           });
@@ -77,6 +89,7 @@ class _pickTime extends State<pickTime> {
       ),
       HomeTimeButton(
         onTap: () {
+          model.setTime(pickedTime:'1:00 PM');
           setState(() {
             selectedIndex = 4;
           });
@@ -86,6 +99,7 @@ class _pickTime extends State<pickTime> {
       ),
       HomeTimeButton(
         onTap: () {
+          model.setTime(pickedTime:'2:00 PM');
           setState(() {
             selectedIndex = 5;
           });
@@ -95,6 +109,7 @@ class _pickTime extends State<pickTime> {
       ),
       HomeTimeButton(
         onTap: () {
+          model.setTime(pickedTime:'3:00 PM');
           setState(() {
             selectedIndex = 6;
           });
@@ -104,6 +119,7 @@ class _pickTime extends State<pickTime> {
       ),
       HomeTimeButton(
         onTap: () {
+          model.setTime(pickedTime:'4:00 PM');
           setState(() {
             selectedIndex = 7;
           });
@@ -113,6 +129,7 @@ class _pickTime extends State<pickTime> {
       ),
       HomeTimeButton(
         onTap: () {
+          model.setTime(pickedTime:'5:00 PM');
           setState(() {
             selectedIndex = 8;
           });
@@ -151,7 +168,7 @@ class _pickTime extends State<pickTime> {
             ),
             Column(
               children: <Widget>[
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 Align(
                   alignment: Alignment.topLeft,
                   child: Container(
@@ -218,5 +235,6 @@ class _pickTime extends State<pickTime> {
             ),
           ],
         ));
-  }
+  });
+}
 }
