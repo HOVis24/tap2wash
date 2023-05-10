@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:tap2wash/pages/carwash_feedback.dart';
-import 'package:tap2wash/pages/carwash_profile.dart';
-import 'package:tap2wash/pages/pick_car.dart';
-
-import 'components/home_service_button.dart';
-import 'components/sidebar.dart';
-import 'model/CartModel.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:tap2wash/components/user_ongoing_orders.dart';
+import 'package:tap2wash/pages/booking_history.dart';
+import 'package:tap2wash/pages/payment_failed.dart';
+import 'package:tap2wash/pages/payment_pending.dart';
+import 'package:tap2wash/pages/pick_service.dart';
+import 'package:tap2wash/pages/user_profile.dart';
 
 import 'app_state_model.dart';
-import 'package:provider/provider.dart';
+import 'components/sidebar.dart';
 
 void main() {
   runApp(ChangeNotifierProvider<AppStateModel>(
@@ -22,6 +23,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: '/',
+      routes: {
+        '/first': (context) => MyHomePage(title: 'Tap2Wash'),
+        '/second': (context) => pickService(title: 'Tap2Wash'),
+        '/third': (context) => userProfile(title: 'Tap2Wash'),
+      },
       title: 'Tap2Wash',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -42,7 +49,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late MediaQueryData queryData;
-  int selectedIndex = 0;
+  int _selectedIndex = 0;
 
   @override
   void initState() {
@@ -54,74 +61,71 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     queryData = MediaQuery.of(context);
     return Consumer<AppStateModel>(builder: (context, model, child) {
-      List<Widget> list = [
-        HomeServiceButton(
-            key: Key('FullWash'),
-            onTap: () {
-              model.setService(pickedService: 'Full Wash');
-              setState(() {
-                selectedIndex = 0;
-                Text(model.service.toString());
-              });
-            },
-            selected: selectedIndex == 0,
-            icon: Icon(Icons.local_car_wash_rounded),
-            title: 'Full Wash',
-            summary: 'Lorem IO'),
-        HomeServiceButton(
-            onTap: () {
-              model.setService(pickedService: 'Light Wash');
-              setState(() {
-                selectedIndex = 1;
-                Text(model.service.toString());
-              });
-            },
-            selected: selectedIndex == 1,
-            icon: Icon(Icons.wash_rounded),
-            title: 'Light Wash',
-            summary: 'Lorem IO'),
-        HomeServiceButton(
-            onTap: () {
-              model.setService(pickedService: 'Interior Cleaning');
-              setState(() {
-                selectedIndex = 2;
-                Text(model.service.toString());
-              });
-            },
-            selected: selectedIndex == 2,
-            icon: Icon(Icons.cleaning_services_rounded),
-            title: 'Interior Cleaning',
-            summary: 'Lorem IO'),
-        HomeServiceButton(
-            onTap: () {
-              model.setService(pickedService: 'Tire Maintenance');
-              setState(() {
-                selectedIndex = 3;
-                Text(model.service.toString());
-              });
-            },
-            selected: selectedIndex == 3,
-            icon: Icon(Icons.tire_repair_rounded),
-            title: 'Tire Maintenance',
-            summary: 'Lorem IO'),
+      List<Widget> ongoingorders = [
+        OnGoingOrders(
+            date: '3/7/2023',
+            time: '4:00 PM',
+            location: '2010 Piy Margal St., Sampaloc, Manila',
+            service: 'Full Wash',
+            car: 'SUV',
+            status: 'Ongoing',
+            payment: 'GCash'),
+        OnGoingOrders(
+            date: '3/4/2023',
+            time: '3:00 PM',
+            location: 'Mezza II Residences, Guirayan St., Quezon City',
+            service: 'Light Wash',
+            car: 'SUV',
+            status: 'Ongoing',
+            payment: 'GCash'),
+        OnGoingOrders(
+            date: '3/7/2023',
+            time: '4:00 PM',
+            location: '2010 Piy Margal St., Sampaloc, Manila',
+            service: 'Full Wash',
+            car: 'SUV',
+            status: 'Ongoing',
+            payment: 'GCash'),
       ];
       return Scaffold(
-          appBar: AppBar(
-            // Here we take the value from the MyHomePage object that was created by
-            // the App.build method, and use it to set our appbar title.
-            backgroundColor: const Color.fromRGBO(49, 185, 228, 1),
-            toolbarHeight: 70,
-            title: Text(widget.title),
-            centerTitle: true,
-            titleTextStyle: const TextTheme(
-              headline6: TextStyle(
-                // headline6 is used for setting title's theme
-                color: Colors.white,
-                fontSize: 36,
-                fontFamily: 'Palanquin',
-                fontWeight: FontWeight.w600,
+          bottomNavigationBar: BottomNavigationBar(
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                  icon: SvgPicture.asset('assets/images/home_btn.svg'),
+                  label: 'Home'),
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset('assets/images/book_service_btn.svg'),
+                label: 'Book a Service',
               ),
-            ).headline6,
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset('assets/images/profile_btn.svg'),
+                label: 'Profile',
+              ),
+            ],
+            currentIndex: _selectedIndex,
+            selectedItemColor: Colors.blue,
+            onTap: (index) {
+              switch (index) {
+                case 0:
+                  Navigator.pushNamed(context, "/first");
+                  break;
+                case 1:
+                  Navigator.pushNamed(context, "/second");
+                  break;
+                case 2:
+                  Navigator.pushNamed(context, "/third");
+                  break;
+              }
+            },
+          ),
+          appBar: AppBar(
+            backgroundColor: const Color.fromRGBO(224, 251, 252, 1),
+            toolbarHeight: 80,
+            title: Image.asset(
+              'assets/images/tap2wash_logo_2.png',
+              scale: 1.3,
+            ),
+            centerTitle: true,
           ),
           drawer: Drawer(child: SideBar()),
           body: ListView(
@@ -135,284 +139,66 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   Column(
                     children: <Widget>[
-                      const SizedBox(height: 20),
-                      const Text(
-                        'What can we do for you today?',
-                        style: TextStyle(
-                            decoration: TextDecoration.none,
-                            fontFamily: 'Palanquin',
-                            fontWeight: FontWeight.w700,
-                            color: Color.fromRGBO(49, 185, 228, 1),
-                            fontSize: 25),
-                      ),
                       Align(
                         alignment: Alignment.topLeft,
                         child: Container(
-                          margin: const EdgeInsets.only(left: 20, top: 20),
+                          margin: const EdgeInsets.only(left: 20, top: 10),
                           child: const Text(
-                            'Pick a service:',
-                            textAlign: TextAlign.center,
+                            'Good Day, Juan',
                             style: TextStyle(
                                 decoration: TextDecoration.none,
                                 fontFamily: 'Palanquin',
                                 fontWeight: FontWeight.w700,
                                 color: Color.fromRGBO(49, 185, 228, 1),
-                                fontSize: 30),
+                                fontSize: 36),
                           ),
+                        ),
+                      ),
+                      Image.asset(
+                        'assets/images/homepage_pic.png',
+                        scale: 1.2,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          print("Tapped Booking History");
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const paymentPending(
+                                title: 'Tap2Wash',
+                              )));
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: const [
+                            Padding(
+                              padding: EdgeInsets.only(left: 15, right: 15),
+                              child: Text(
+                                'Booking History',
+                                style: TextStyle(
+                                    decoration: TextDecoration.none,
+                                    fontFamily: 'Palanquin',
+                                    fontWeight: FontWeight.w700,
+                                    color: Color.fromRGBO(49, 185, 228, 1),
+                                    fontSize: 25),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 5, right: 25),
+                              child: Text(
+                                '>',
+                                style: TextStyle(
+                                    decoration: TextDecoration.none,
+                                    fontFamily: 'Palanquin',
+                                    fontWeight: FontWeight.w400,
+                                    color: Color.fromRGBO(49, 185, 228, 1),
+                                    fontSize: 40),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       Wrap(
-                        children: list,
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              print("Tapped Next");
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => const pickCar(
-                                        title: 'Tap2Wash',
-                                      )));
-                            },
-                            child: Card(
-                              margin: const EdgeInsets.only(right: 20),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                              color: const Color.fromRGBO(49, 185, 228, 1),
-                              child: SizedBox(
-                                  width: 100,
-                                  height: 40,
-                                  child: Row(
-                                    children: const <Widget>[
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Icon(
-                                        Icons.play_arrow_sharp,
-                                        color: Colors.white,
-                                      ),
-                                      Text(
-                                        'NEXT',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            decoration: TextDecoration.none,
-                                            fontFamily: 'Palanquin',
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.white,
-                                            fontSize: 20),
-                                      ),
-                                    ],
-                                  )),
-                            ),
-                          )
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        'Recent Bookings',
-                        style: TextStyle(
-                            decoration: TextDecoration.none,
-                            fontFamily: 'Palanquin',
-                            fontWeight: FontWeight.w700,
-                            color: Color.fromRGBO(49, 185, 228, 1),
-                            fontSize: 25),
-                      ),
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                          side: const BorderSide(
-                            color: Colors.black,
-                            width: 1.0,
-                          ),
-                        ),
-                        color: Colors.white,
-                        child: SizedBox(
-                            width: 370,
-                            height: 120,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                Text(
-                                  'Date & Time: 2/19/2023 @ 5:00 PM',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      decoration: TextDecoration.none,
-                                      fontFamily: 'Palanquin',
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black,
-                                      fontSize: 12),
-                                ),
-                                Flexible(
-                                  child: Text(
-                                    'Location: Mezza II Residences, Guirayan Street, Quezon City',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        decoration: TextDecoration.none,
-                                        fontFamily: 'Palanquin',
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.black,
-                                        fontSize: 12),
-                                  ),
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Text(
-                                          'Service: Lightwash',
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                              decoration: TextDecoration.none,
-                                              fontFamily: 'Palanquin',
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.black,
-                                              fontSize: 12),
-                                        ),
-                                        Text(
-                                          'Car: Sedan',
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                              decoration: TextDecoration.none,
-                                              fontFamily: 'Palanquin',
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.black,
-                                              fontSize: 12),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(),
-                                    SizedBox(),
-                                    SizedBox(),
-                                    Column(
-                                      children: [
-                                        Text(
-                                          'Status: Done',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              decoration: TextDecoration.none,
-                                              fontFamily: 'Palanquin',
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.black,
-                                              fontSize: 12),
-                                        ),
-                                        Text(
-                                          'Payment: Cash',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              decoration: TextDecoration.none,
-                                              fontFamily: 'Palanquin',
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.black,
-                                              fontSize: 12),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ],
-                            )),
-                      ),
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                          side: const BorderSide(
-                            color: Colors.black,
-                            width: 1.0,
-                          ),
-                        ),
-                        color: Colors.white,
-                        child: SizedBox(
-                            width: 370,
-                            height: 120,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                Text(
-                                  'Date & Time: 2/15/2023 @ 1:00 PM',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      decoration: TextDecoration.none,
-                                      fontFamily: 'Palanquin',
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black,
-                                      fontSize: 12),
-                                ),
-                                Flexible(
-                                  child: Text(
-                                    'Location: 2010 Piy Margal St., Sampaloc, Manila',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        decoration: TextDecoration.none,
-                                        fontFamily: 'Palanquin',
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.black,
-                                        fontSize: 12),
-                                  ),
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Text(
-                                          'Service: Full Wash',
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                              decoration: TextDecoration.none,
-                                              fontFamily: 'Palanquin',
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.black,
-                                              fontSize: 12),
-                                        ),
-                                        Text(
-                                          'Car: SUV',
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                              decoration: TextDecoration.none,
-                                              fontFamily: 'Palanquin',
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.black,
-                                              fontSize: 12),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(),
-                                    SizedBox(),
-                                    SizedBox(),
-                                    Column(
-                                      children: [
-                                        Text(
-                                          'Status: Done',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              decoration: TextDecoration.none,
-                                              fontFamily: 'Palanquin',
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.black,
-                                              fontSize: 12),
-                                        ),
-                                        Text(
-                                          'Payment: UnionBank',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              decoration: TextDecoration.none,
-                                              fontFamily: 'Palanquin',
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.black,
-                                              fontSize: 12),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ],
-                            )),
+                        runSpacing: 10,
+                        children: ongoingorders,
                       ),
                     ],
                   ),

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tap2wash/main.dart';
+import 'package:tap2wash/pages/pick_location.dart';
+import 'package:tap2wash/pages/pick_service.dart';
+import 'package:tap2wash/pages/user_profile.dart';
 
 import '../components/sidebar.dart';
 
@@ -10,6 +14,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: '/',
+      routes: {
+        '/first': (context) => const MyHomePage(title: 'Tap2Wash'),
+        '/second': (context) => const pickService(title: 'Tap2Wash'),
+        '/third': (context) => const userProfile(title: 'Tap2Wash'),
+      },
       title: 'Tap2Wash',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -30,28 +40,51 @@ class paymentPending extends StatefulWidget {
 
 class _paymentPending extends State<paymentPending> {
   late MediaQueryData queryData;
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     queryData = MediaQuery.of(context);
 
     return Scaffold(
-        appBar: AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          backgroundColor: const Color.fromRGBO(49, 185, 228, 1),
-          toolbarHeight: 70,
-          title: Text(widget.title),
-          centerTitle: true,
-          titleTextStyle: const TextTheme(
-            headline6: TextStyle(
-              // headline6 is used for setting title's theme
-              color: Colors.white,
-              fontSize: 36,
-              fontFamily: 'Palanquin',
-              fontWeight: FontWeight.w600,
+        bottomNavigationBar: BottomNavigationBar(
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+                icon: SvgPicture.asset('assets/images/home_btn.svg'),
+                label: 'Home'),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/images/book_service_btn.svg'),
+              label: 'Book a Service',
             ),
-          ).headline6,
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/images/profile_btn.svg'),
+              label: 'Profile',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.blue,
+          onTap: (index) {
+            switch (index) {
+              case 0:
+                Navigator.pushNamed(context, "/first");
+                break;
+              case 1:
+                Navigator.pushNamed(context, "/second");
+                break;
+              case 2:
+                Navigator.pushNamed(context, "/third");
+                break;
+            }
+          },
+        ),
+        appBar: AppBar(
+          backgroundColor: const Color.fromRGBO(224, 251, 252, 1),
+          toolbarHeight: 80,
+          title: Image.asset(
+            'assets/images/tap2wash_logo_2.png',
+            scale: 1.3,
+          ),
+          centerTitle: true,
         ),
         drawer: Drawer(
           child: SideBar(),
@@ -76,12 +109,12 @@ class _paymentPending extends State<paymentPending> {
                   ),
                   color: Colors.white,
                   child: Container(
-                      margin: EdgeInsets.all(10),
+                      margin: const EdgeInsets.all(10),
                       width: 380,
                       height: 250,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
+                        children: const <Widget>[
                           Flexible(
                             child: Text(
                               'Your booking is currently',
@@ -89,9 +122,9 @@ class _paymentPending extends State<paymentPending> {
                               style: TextStyle(
                                   decoration: TextDecoration.none,
                                   fontFamily: 'Palanquin',
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.w400,
                                   color: Colors.black,
-                                  fontSize: 30),
+                                  fontSize: 24),
                             ),
                           ),
                           Flexible(
@@ -102,176 +135,65 @@ class _paymentPending extends State<paymentPending> {
                                   decoration: TextDecoration.none,
                                   fontFamily: 'Palanquin',
                                   fontWeight: FontWeight.w600,
-                                  color: Colors.orange,
-                                  fontSize: 30),
+                                  color: Colors.green,
+                                  fontSize: 28),
                             ),
                           ),
                           Flexible(
                             child: Text(
-                              'Please pay the full amount to proceed with your booking.',
+                              'Please pay the full amount to confirm your booking. Thank you!',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   decoration: TextDecoration.none,
                                   fontFamily: 'Palanquin',
-                                  fontWeight: FontWeight.w400,
+                                  fontWeight: FontWeight.w200,
                                   color: Colors.black,
-                                  fontSize: 20),
+                                  fontSize: 18),
                             ),
                           ),
                         ],
                       )),
                 ),
-                SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    GestureDetector(
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.only(right: 30),
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: GestureDetector(
                       onTap: () {
-                        print("Tapped Confirm");
+                        print("Tapped Home");
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                const MyHomePage(title: 'Tap2Wash')));
+                            builder: (context) => const MyHomePage(
+                              title: 'Tap2Wash',
+                            )));
                       },
                       child: Card(
-                        margin: const EdgeInsets.only(right: 20),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        color: const Color.fromRGBO(49, 185, 228, 1),
+                        color: const Color.fromRGBO(236, 250, 255, 1),
                         child: SizedBox(
-                            width: 120,
-                            height: 50,
+                            width: 90,
+                            height: 40,
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: const <Widget>[
                                 Text(
-                                  'CONFIRM',
+                                  'HOME',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       decoration: TextDecoration.none,
                                       fontFamily: 'Palanquin',
                                       fontWeight: FontWeight.w600,
-                                      color: Colors.white,
+                                      color: Color.fromRGBO(49, 185, 228, 1),
                                       fontSize: 20),
                                 ),
                               ],
                             )),
                       ),
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ));
-
-    Stack(
-      children: <Widget>[
-        Container(
-          width: queryData.size.width,
-          height: queryData.size.height,
-          decoration: const BoxDecoration(color: Colors.white),
-        ),
-        Column(
-          children: <Widget>[
-            const SizedBox(height: 20),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-                side: const BorderSide(
-                  color: Colors.black,
-                  width: 0.5,
-                ),
-              ),
-              color: Colors.white,
-              child: Container(
-                  margin: EdgeInsets.all(10),
-                  width: 380,
-                  height: 250,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Flexible(
-                        child: Text(
-                          'Your booking is currently',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              decoration: TextDecoration.none,
-                              fontFamily: 'Palanquin',
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
-                              fontSize: 30),
-                        ),
-                      ),
-                      Flexible(
-                        child: Text(
-                          'ON HOLD',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              decoration: TextDecoration.none,
-                              fontFamily: 'Palanquin',
-                              fontWeight: FontWeight.w600,
-                              color: Colors.orange,
-                              fontSize: 30),
-                        ),
-                      ),
-                      Flexible(
-                        child: Text(
-                          'Please pay the full amount to proceed with your booking.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              decoration: TextDecoration.none,
-                              fontFamily: 'Palanquin',
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black,
-                              fontSize: 20),
-                        ),
-                      ),
-                    ],
-                  )),
-            ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    print("Tapped Confirm");
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            const MyHomePage(title: 'Tap2Wash')));
-                  },
-                  child: Card(
-                    margin: const EdgeInsets.only(right: 20),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
                     ),
-                    color: const Color.fromRGBO(49, 185, 228, 1),
-                    child: SizedBox(
-                        width: 120,
-                        height: 50,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: const <Widget>[
-                            Text(
-                              'CONFIRM',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  fontFamily: 'Palanquin',
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                  fontSize: 20),
-                            ),
-                          ],
-                        )),
                   ),
                 )
               ],
             ),
           ],
-        ),
-      ],
-    );
+        ));
   }
 }

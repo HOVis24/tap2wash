@@ -4,12 +4,12 @@ import 'package:tap2wash/pages/edit_payment.dart';
 class HomePaymentOptions extends StatefulWidget {
   const HomePaymentOptions(
       {super.key,
-      required this.option,
-      required this.icon,
-      required this.accName,
-      required this.accNum,
-      required this.title,
-      required this.primary});
+        required this.option,
+        required this.icon,
+        required this.accName,
+        required this.accNum,
+        required this.title,
+        required this.primary});
 
   final bool primary;
   final String option;
@@ -26,191 +26,106 @@ class _HomePaymentOptionsState extends State<HomePaymentOptions> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-          side: const BorderSide(
-            color: Colors.black,
-            width: 1.0,
-          ),
-        ),
-        child: SizedBox(
-            width: 355,
-            height: 130,
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      widget.option,
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          decoration: TextDecoration.none,
-                          fontFamily: 'Palanquin',
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
-                          fontSize: 20),
-                    ),
-                    SizedBox(),
-                    SizedBox(),
-                  ],
-                ),
-                SizedBox(),
-                Row(
+        child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5.0),
+              side: BorderSide(
+                color: const Color.fromRGBO(49, 185, 228, 1),
+                width: 1.0,
+              ),
+            ),
+            child: SizedBox(
+                width: 350,
+                height: 120,
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    widget.icon,
-                    Column(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text(
-                          widget.title,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              decoration: TextDecoration.none,
-                              fontFamily: 'Palanquin',
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
-                              fontSize: 15),
+                        widget.icon,
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              width: 150,
+                              child: Text(
+                                widget.title,
+                                textAlign: TextAlign.start,
+                                style: const TextStyle(
+                                    decoration: TextDecoration.none,
+                                    fontFamily: 'Palanquin',
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black,
+                                    fontSize: 14),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 150,
+                              child: Text(
+                                widget.accName,
+                                textAlign: TextAlign.start,
+                                style: const TextStyle(
+                                    decoration: TextDecoration.none,
+                                    fontFamily: 'Palanquin',
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey,
+                                    fontSize: 14),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 150,
+                              child: Text(
+                                widget.accNum,
+                                textAlign: TextAlign.start,
+                                style: const TextStyle(
+                                    decoration: TextDecoration.none,
+                                    fontFamily: 'Palanquin',
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey,
+                                    fontSize: 14),
+                              ),
+                            ),
+                          ],
                         ),
-                        Text(
-                          widget.accName,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              decoration: TextDecoration.none,
-                              fontFamily: 'Palanquin',
-                              fontWeight: FontWeight.w500,
-                              color: Colors.grey,
-                              fontSize: 15),
+                        Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => const editPayment(
+                                      title: 'Tap2Wash',
+                                    )));
+                              },
+                              child: Card(
+                                color: const Color.fromRGBO(236, 250, 255, 1),
+                                child: SizedBox(
+                                    width: 60,
+                                    height: 30,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: const <Widget>[
+                                        Text(
+                                          'EDIT',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              decoration: TextDecoration.none,
+                                              fontFamily: 'Palanquin',
+                                              fontWeight: FontWeight.w500,
+                                              color: Color.fromRGBO(62, 171, 239, 1),
+                                              fontSize: 15),
+                                        ),
+                                      ],
+                                    )),
+                              ),
+                            ),
+                          ],
                         ),
-                        Text(
-                          widget.accNum,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              decoration: TextDecoration.none,
-                              fontFamily: 'Palanquin',
-                              fontWeight: FontWeight.w500,
-                              color: Colors.grey,
-                              fontSize: 15),
-                        ),
+
                       ],
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     print("Tapped Primary");
-                        //   },
-                        //   child: Card(
-                        //     shape: RoundedRectangleBorder(
-                        //       borderRadius: BorderRadius.circular(30.0),
-                        //     ),
-                        //     color: const Color.fromRGBO(49, 110, 228, 1),
-                        //     child: SizedBox(
-                        //         width: 73,
-                        //         height: 24,
-                        //         child: Row(
-                        //           mainAxisAlignment: MainAxisAlignment.center,
-                        //           children: const <Widget>[
-                        //             Icon(
-                        //               Icons.switch_access_shortcut,
-                        //               size: 15,
-                        //               color: Colors.white,
-                        //             ),
-                        //             Text(
-                        //               'PRIMARY',
-                        //               textAlign: TextAlign.center,
-                        //               style: TextStyle(
-                        //                   decoration: TextDecoration.none,
-                        //                   fontFamily: 'Palanquin',
-                        //                   fontWeight: FontWeight.w600,
-                        //                   color: Colors.white,
-                        //                   fontSize: 10),
-                        //             ),
-                        //           ],
-                        //         )),
-                        //   ),
-                        // ),
-                        GestureDetector(
-                          onTap: () {
-                            print("Tapped Remove");
-                          },
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                            ),
-                            color: const Color.fromRGBO(228, 49, 49, 1),
-                            child: SizedBox(
-                                width: 73,
-                                height: 24,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const <Widget>[
-                                    Icon(
-                                      Icons.remove_circle_outline_sharp,
-                                      size: 15,
-                                      color: Colors.white,
-                                    ),
-                                    Text(
-                                      'REMOVE',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          decoration: TextDecoration.none,
-                                          fontFamily: 'Palanquin',
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white,
-                                          fontSize: 10),
-                                    ),
-                                  ],
-                                )),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            print("Tapped Edit");
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    const editPayment(title: 'Tap2Wash')));
-                          },
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                            ),
-                            color: const Color.fromRGBO(49, 185, 228, 1),
-                            child: SizedBox(
-                                width: 73,
-                                height: 24,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const <Widget>[
-                                    Icon(
-                                      Icons.edit,
-                                      size: 15,
-                                      color: Colors.white,
-                                    ),
-                                    Text(
-                                      'EDIT INFO',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          decoration: TextDecoration.none,
-                                          fontFamily: 'Palanquin',
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white,
-                                          fontSize: 10),
-                                    ),
-                                  ],
-                                )),
-                          ),
-                        ),
-                      ],
-                    ),
+
                   ],
-                ),
-              ],
-            )),
-      ),
-    );
+                ))));
   }
 }

@@ -24,108 +24,148 @@ class _OnGoingOrdersState extends State<OnGoingOrders> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
         side: const BorderSide(
-          color: Colors.black,
+          color: Colors.grey,
           width: 1.0,
         ),
       ),
       color: Colors.white,
       child: SizedBox(
-          width: 370,
+          width: 350,
           height: 120,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              RichText(
-                  text: TextSpan(
-                      style: TextStyle(
-                          decoration: TextDecoration.none,
-                          fontFamily: 'Palanquin',
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
-                          fontSize: 12),
-                      children: <TextSpan>[
-                    TextSpan(text: 'Date & Time: '),
-                    TextSpan(text: widget.date),
-                    TextSpan(text: ' @ '),
-                    TextSpan(text: widget.time),
-                  ])),
-              RichText(
-                  text: TextSpan(
-                      style: TextStyle(
-                          decoration: TextDecoration.none,
-                          fontFamily: 'Palanquin',
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
-                          fontSize: 12),
-                      children: <TextSpan>[
-                    TextSpan(text: 'Location: '),
-                    TextSpan(text: widget.location),
-                  ])),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    children: [
-                      RichText(
-                          text: TextSpan(
-                              style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  fontFamily: 'Palanquin',
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black,
-                                  fontSize: 12),
-                              children: <TextSpan>[
-                            TextSpan(text: 'Service: '),
-                            TextSpan(text: widget.service),
-                          ])),
-                      RichText(
-                          text: TextSpan(
-                              style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  fontFamily: 'Palanquin',
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black,
-                                  fontSize: 12),
-                              children: <TextSpan>[
-                            TextSpan(text: 'Car: '),
-                            TextSpan(text: widget.car),
-                          ])),
-                    ],
-                  ),
-                  SizedBox(),
-                  SizedBox(),
-                  SizedBox(),
-                  Column(
-                    children: [
-                      RichText(
-                          text: TextSpan(
-                              style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  fontFamily: 'Palanquin',
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black,
-                                  fontSize: 12),
-                              children: <TextSpan>[
-                            TextSpan(text: 'Status: '),
-                            TextSpan(text: widget.status),
-                          ])),
-                      RichText(
-                          text: TextSpan(
-                              style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  fontFamily: 'Palanquin',
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black,
-                                  fontSize: 12),
-                              children: <TextSpan>[
-                            TextSpan(text: 'Payment: '),
-                            TextSpan(text: widget.payment),
-                          ])),
-                    ],
-                  )
-                ],
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.only(left: 50.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: RichText(
+                      text: TextSpan(
+                          style: const TextStyle(
+                              decoration: TextDecoration.none,
+                              fontFamily: 'Palanquin',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 12),
+                          children: <TextSpan>[
+                        const TextSpan(text: 'Date & Time: '),
+                        TextSpan(
+                            text: widget.date,
+                            style:
+                                const TextStyle(fontWeight: FontWeight.w400)),
+                        const TextSpan(
+                            text: ' @ ',
+                            style: TextStyle(fontWeight: FontWeight.w400)),
+                        TextSpan(
+                            text: widget.time,
+                            style:
+                                const TextStyle(fontWeight: FontWeight.w400)),
+                      ])),
+                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: RichText(
+                      text: TextSpan(
+                          style: const TextStyle(
+                              decoration: TextDecoration.none,
+                              fontFamily: 'Palanquin',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 12),
+                          children: <TextSpan>[
+                        const TextSpan(text: 'Location: '),
+                        TextSpan(
+                            text: widget.location,
+                            style:
+                                const TextStyle(fontWeight: FontWeight.w400)),
+                      ])),
+                ),
+                Row(
+                  children: [
+                    Column(
+                      children: [
+                        SizedBox(
+                          width: 150,
+                          child: RichText(
+                              text: TextSpan(
+                                  style: const TextStyle(
+                                      decoration: TextDecoration.none,
+                                      fontFamily: 'Palanquin',
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 12),
+                                  children: <TextSpan>[
+                                const TextSpan(text: 'Service: '),
+                                TextSpan(
+                                    text: widget.service,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w400)),
+                              ])),
+                        ),
+                        SizedBox(
+                          width: 150,
+                          child: RichText(
+                              text: TextSpan(
+                                  style: const TextStyle(
+                                      decoration: TextDecoration.none,
+                                      fontFamily: 'Palanquin',
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 12),
+                                  children: <TextSpan>[
+                                const TextSpan(text: 'Car: '),
+                                TextSpan(
+                                    text: widget.car,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w400)),
+                              ])),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        SizedBox(
+                          width: 150,
+                          child: RichText(
+                              text: TextSpan(
+                                  style: const TextStyle(
+                                      decoration: TextDecoration.none,
+                                      fontFamily: 'Palanquin',
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 12),
+                                  children: <TextSpan>[
+                                const TextSpan(text: 'Status: '),
+                                TextSpan(
+                                    text: widget.status,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w400)),
+                              ])),
+                        ),
+                        SizedBox(
+                          width: 150,
+                          child: RichText(
+                              text: TextSpan(
+                                  style: const TextStyle(
+                                      decoration: TextDecoration.none,
+                                      fontFamily: 'Palanquin',
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 12),
+                                  children: <TextSpan>[
+                                const TextSpan(text: 'Payment: '),
+                                TextSpan(
+                                    text: widget.payment,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w400)),
+                              ])),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ],
+            ),
           )),
     );
   }

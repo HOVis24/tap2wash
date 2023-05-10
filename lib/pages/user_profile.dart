@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tap2wash/pages/edit_profile.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tap2wash/main.dart';
+import 'package:tap2wash/pages/edit_profile.dart';
+import 'package:tap2wash/pages/pick_service.dart';
+import 'package:tap2wash/pages/user_intro.dart';
+import 'package:tap2wash/pages/user_settings.dart';
 
 import '../components/sidebar.dart';
 
@@ -11,6 +15,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: '/third',
+      routes: {
+        '/first': (context) => const MyHomePage(title: 'Tap2Wash'),
+        '/second': (context) => const pickService(title: 'Tap2Wash'),
+        '/third': (context) => const userProfile(title: 'Tap2Wash'),
+      },
       title: 'Tap2Wash',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -31,29 +41,47 @@ class userProfile extends StatefulWidget {
 
 class _userProfile extends State<userProfile> {
   late MediaQueryData queryData;
+  //This is for the service buttons!
   int selectedIndex = 0;
+  //This is for the BottomNavBar routes!
+  int _selectedIndex = 2;
 
   @override
   Widget build(BuildContext context) {
     queryData = MediaQuery.of(context);
 
     return Scaffold(
-        appBar: AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          backgroundColor: const Color.fromRGBO(49, 185, 228, 1),
-          toolbarHeight: 70,
-          title: Text(widget.title),
-          centerTitle: true,
-          titleTextStyle: const TextTheme(
-            headline6: TextStyle(
-              // headline6 is used for setting title's theme
-              color: Colors.white,
-              fontSize: 36,
-              fontFamily: 'Palanquin',
-              fontWeight: FontWeight.w600,
+        bottomNavigationBar: BottomNavigationBar(
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+                icon: SvgPicture.asset('assets/images/home_btn.svg'),
+                label: 'Home'),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                'assets/images/book_service_btn.svg',
+              ),
+              label: 'Book a Service',
             ),
-          ).headline6,
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/images/profile_btn.svg'),
+              label: 'Profile',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.blue,
+          onTap: (index) {
+            switch (index) {
+              case 0:
+                Navigator.pushNamed(context, "/first");
+                break;
+              case 1:
+                Navigator.pushNamed(context, "/second");
+                break;
+              case 2:
+                Navigator.pushNamed(context, "/third");
+                break;
+            }
+          },
         ),
         drawer: Drawer(
           child: SideBar(),
@@ -66,206 +94,204 @@ class _userProfile extends State<userProfile> {
               decoration: const BoxDecoration(color: Colors.white),
             ),
             Column(
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    margin: const EdgeInsets.only(top: 20),
-                    child: const Text(
-                      'My Profile:',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          decoration: TextDecoration.none,
-                          fontFamily: 'Palanquin',
-                          fontWeight: FontWeight.w700,
-                          color: Color.fromRGBO(49, 185, 228, 1),
-                          fontSize: 25),
-                    ),
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    print("Tapped Back");
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const MyHomePage(
+                          title: 'Tap2Wash',
+                        )));
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.only(top: 50.0, left: 15),
+                    child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Icon(
+                          Icons.arrow_back_ios_new_sharp,
+                          size: 35,
+                        )),
                   ),
                 ),
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                    side: const BorderSide(
-                      color: Colors.black,
-                      width: 1.0,
-                    ),
-                  ),
-                  color: Colors.white,
-                  child: SizedBox(
-                      width: 350,
-                      height: 400,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(Icons.person_pin, size: 100),
-                          Text(
-                            'Full Name:',
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                                decoration: TextDecoration.none,
-                                fontFamily: 'Palanquin',
-                                fontWeight: FontWeight.w400,
-                                color: Colors.black,
-                                fontSize: 15),
-                          ),
-                          Text(
-                            'Juan F. Dela Cruz',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                decoration: TextDecoration.none,
-                                fontFamily: 'Palanquin',
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black,
-                                fontSize: 15),
-                          ),
-                          Text(
-                            'Address:',
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                                decoration: TextDecoration.none,
-                                fontFamily: 'Palanquin',
-                                fontWeight: FontWeight.w400,
-                                color: Colors.black,
-                                fontSize: 15),
-                          ),
-                          Flexible(
-                            child: Text(
-                              'Mezza II Residences, Guirayan St., Quezon City',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  fontFamily: 'Palanquin',
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black,
-                                  fontSize: 15),
-                            ),
-                          ),
-                          Text(
-                            'Sex:',
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                                decoration: TextDecoration.none,
-                                fontFamily: 'Palanquin',
-                                fontWeight: FontWeight.w400,
-                                color: Colors.black,
-                                fontSize: 15),
-                          ),
-                          Text(
-                            'Male',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                decoration: TextDecoration.none,
-                                fontFamily: 'Palanquin',
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black,
-                                fontSize: 15),
-                          ),
-                          Text(
-                            'Birthday:',
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                                decoration: TextDecoration.none,
-                                fontFamily: 'Palanquin',
-                                fontWeight: FontWeight.w400,
-                                color: Colors.black,
-                                fontSize: 15),
-                          ),
-                          Text(
-                            'September 23, 1991',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                decoration: TextDecoration.none,
-                                fontFamily: 'Palanquin',
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black,
-                                fontSize: 15),
-                          ),
-                        ],
-                      )),
-                ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        print("Tapped Go Back");
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const MyHomePage(
-                                  title: 'Tap2Wash',
-                                )));
-                      },
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                        color: const Color.fromRGBO(74, 83, 151, 1),
-                        child: SizedBox(
-                            width: 160,
-                            height: 50,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: const <Widget>[
-                                Icon(
-                                  Icons.keyboard_return_rounded,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                                Text(
-                                  ' GO BACK',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      decoration: TextDecoration.none,
-                                      fontFamily: 'Palanquin',
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white,
-                                      fontSize: 15),
-                                ),
-                              ],
-                            )),
-                      ),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(Icons.account_circle, size: 100),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        print("Tapped Next");
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const editProfile(
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const editProfile(
                                   title: 'Tap2Wash',
                                 )));
-                      },
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0),
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: SvgPicture.asset('assets/images/edit_btn.svg'),
+                          ),
                         ),
-                        color: const Color.fromRGBO(49, 185, 228, 1),
-                        child: SizedBox(
-                            width: 160,
-                            height: 50,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: const <Widget>[
-                                Icon(
-                                  Icons.mode_edit_rounded,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                                Text(
-                                  ' EDIT PROFILE',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      decoration: TextDecoration.none,
-                                      fontFamily: 'Palanquin',
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white,
-                                      fontSize: 15),
-                                ),
-                              ],
-                            )),
-                      ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const userSettings(
+                                  title: 'Tap2Wash',
+                                )));
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: SvgPicture.asset(
+                                'assets/images/settings_btn.svg'),
+                          ),
+                        )
+                      ],
                     )
+                  ],
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+                Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        SizedBox(
+                          width: queryData.size.width / 5,
+                          child: const Text(
+                            'Name',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                decoration: TextDecoration.none,
+                                fontFamily: 'Palanquin',
+                                fontWeight: FontWeight.w700,
+                                color: Color.fromRGBO(49, 185, 228, 1),
+                                fontSize: 16),
+                          ),
+                        ),
+                        SizedBox(
+                          width: queryData.size.width / 1.4,
+                          child: const Text(
+                            'Juan F. Dela Cruz',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                decoration: TextDecoration.none,
+                                fontFamily: 'Palanquin',
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black,
+                                fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        SizedBox(
+                          width: queryData.size.width / 5,
+                          child: const Text(
+                            'Gender',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                decoration: TextDecoration.none,
+                                fontFamily: 'Palanquin',
+                                fontWeight: FontWeight.w700,
+                                color: Color.fromRGBO(49, 185, 228, 1),
+                                fontSize: 16),
+                          ),
+                        ),
+                        SizedBox(
+                          width: queryData.size.width / 1.4,
+                          child: const Text(
+                            'Male',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                decoration: TextDecoration.none,
+                                fontFamily: 'Palanquin',
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black,
+                                fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        SizedBox(
+                          width: queryData.size.width / 5,
+                          child: const Text(
+                            'Nickname',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                decoration: TextDecoration.none,
+                                fontFamily: 'Palanquin',
+                                fontWeight: FontWeight.w700,
+                                color: Color.fromRGBO(49, 185, 228, 1),
+                                fontSize: 16),
+                          ),
+                        ),
+                        SizedBox(
+                          width: queryData.size.width / 1.4,
+                          child: const Text(
+                            'Juan',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                decoration: TextDecoration.none,
+                                fontFamily: 'Palanquin',
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black,
+                                fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        SizedBox(
+                          width: queryData.size.width / 5,
+                          child: const Text(
+                            'Address',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                decoration: TextDecoration.none,
+                                fontFamily: 'Palanquin',
+                                fontWeight: FontWeight.w700,
+                                color: Color.fromRGBO(49, 185, 228, 1),
+                                fontSize: 16),
+                          ),
+                        ),
+                        SizedBox(
+                          width: queryData.size.width / 1.4,
+                          child: const Text(
+                            '1146 Centro Street, Sampaloc, Manila',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                decoration: TextDecoration.none,
+                                fontFamily: 'Palanquin',
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black,
+                                fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ],

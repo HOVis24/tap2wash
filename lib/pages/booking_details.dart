@@ -1,7 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:tap2wash/main.dart';
-import 'package:tap2wash/pages/payment_pending.dart';
+import 'dart:math';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:tap2wash/components/user_booking_details.dart';
+import 'package:tap2wash/main.dart';
+import 'package:tap2wash/pages/pick_service.dart';
+import 'package:tap2wash/pages/user_profile.dart';
+
+import '../app_state_model.dart';
 import '../components/sidebar.dart';
 
 class MyApp extends StatelessWidget {
@@ -11,6 +18,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: '/second',
+      routes: {
+        '/first': (context) => const MyHomePage(title: 'Tap2Wash'),
+        '/second': (context) => const pickService(title: 'Tap2Wash'),
+        '/third': (context) => const userProfile(title: 'Tap2Wash'),
+      },
       title: 'Tap2Wash',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -20,400 +33,174 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class bookingDetails extends StatefulWidget {
-  const bookingDetails({super.key, required this.title});
+class BookingDetails extends StatefulWidget {
+  const BookingDetails({super.key, required this.title});
 
   final String title;
 
   @override
-  State<bookingDetails> createState() => _bookingDetails();
+  State<BookingDetails> createState() => _BookingDetails();
 }
 
-class _bookingDetails extends State<bookingDetails> {
+class _BookingDetails extends State<BookingDetails> {
   late MediaQueryData queryData;
+
+  //This is for the service buttons!
   int selectedIndex = 0;
+
+  //This is for the BottomNavBar routes!
+  int _selectedIndex = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    var model = Provider.of<AppStateModel>(context, listen: false);
+  }
 
   @override
   Widget build(BuildContext context) {
     queryData = MediaQuery.of(context);
+    Random random = Random();
+    var _randomID = random.nextInt(99999);
 
-    return Scaffold(
-        appBar: AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          backgroundColor: const Color.fromRGBO(49, 185, 228, 1),
-          toolbarHeight: 70,
-          title: Text(widget.title),
-          centerTitle: true,
-          titleTextStyle: const TextTheme(
-            headline6: TextStyle(
-              // headline6 is used for setting title's theme
-              color: Colors.white,
-              fontSize: 36,
-              fontFamily: 'Palanquin',
-              fontWeight: FontWeight.w600,
-            ),
-          ).headline6,
+    return Consumer<AppStateModel>(builder: (context, model, child) {
+      List<Widget> list = [
+        UserBookingDetails(
+          selected: selectedIndex == 0,
+          service: model.service,
+          car: model.car,
+          address: model.address,
+          date: model.date,
+          time: model.time,
+          payment: model.payment,
         ),
-        drawer: Drawer(
-          child: SideBar(),
-        ),
-        body:
-        ListView(
-          children: [
-            Stack(
-              children: <Widget>[
-                Container(
-                  width: queryData.size.width,
-                  height: queryData.size.height,
-                  decoration: const BoxDecoration(color: Colors.white),
+      ];
+
+      return Scaffold(
+          bottomNavigationBar: BottomNavigationBar(
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                  icon: SvgPicture.asset('assets/images/home_btn.svg'),
+                  label: 'Home'),
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  'assets/images/book_service_btn.svg',
                 ),
-                Column(
-                  children: <Widget>[
-                    const SizedBox(height: 20),
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                        side: const BorderSide(
-                          color: Colors.black,
-                          width: 0.5,
+                label: 'Book a Service',
+              ),
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset('assets/images/profile_btn.svg'),
+                label: 'Profile',
+              ),
+            ],
+            currentIndex: _selectedIndex,
+            selectedItemColor: Colors.blue,
+            onTap: (index) {
+              switch (index) {
+                case 0:
+                  Navigator.pushNamed(context, "/first");
+                  break;
+                case 1:
+                  Navigator.pushNamed(context, "/second");
+                  break;
+                case 2:
+                  Navigator.pushNamed(context, "/third");
+                  break;
+              }
+            },
+          ),
+          appBar: AppBar(
+            backgroundColor: const Color.fromRGBO(224, 251, 252, 1),
+            toolbarHeight: 80,
+            title: Image.asset(
+              'assets/images/tap2wash_logo_2.png',
+              scale: 1.3,
+            ),
+            centerTitle: true,
+          ),
+          drawer: Drawer(
+            child: SideBar(),
+          ),
+          body: Stack(
+            children: <Widget>[
+              Container(
+                width: queryData.size.width,
+                height: queryData.size.height,
+                decoration: const BoxDecoration(color: Colors.white),
+              ),
+              Column(
+                children: <Widget>[
+                  Image.asset('assets/images/booking_details_icon.png'),
+                  const Text(
+                    'Booking Confirmed!',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        decoration: TextDecoration.none,
+                        fontFamily: 'Palanquin',
+                        fontWeight: FontWeight.w700,
+                        color: Color.fromRGBO(49, 185, 228, 1),
+                        fontSize: 30),
+                  ),
+                  RichText(
+                    text: TextSpan(
+                        text: "Booking ID: ",
+                        style: const TextStyle(
+                            decoration: TextDecoration.none,
+                            fontFamily: 'Palanquin',
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
+                            fontSize: 16),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: _randomID.toString(),
+                              style: const TextStyle(
+                                decoration: TextDecoration.underline,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 17,
+                              )),
+                        ]),
+                  ),
+                  Wrap(children: list),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: GestureDetector(
+                        onTap: () {
+                          print("Tapped Next");
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const MyHomePage(
+                                    title: 'Tap2Wash',
+                                  )));
+                        },
+                        child: Card(
+                          color: const Color.fromRGBO(236, 250, 255, 1),
+                          child: SizedBox(
+                              width: 180,
+                              height: 45,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const <Widget>[
+                                  Text(
+                                    'Back to Home',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        decoration: TextDecoration.none,
+                                        fontFamily: 'Palanquin',
+                                        fontWeight: FontWeight.w600,
+                                        color: Color.fromRGBO(49, 185, 228, 1),
+                                        fontSize: 20),
+                                  ),
+                                ],
+                              )),
                         ),
                       ),
-                      color: Colors.white,
-                      child: Container(
-                          width: 450,
-                          height: 400,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'BOOKING ID: ',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        decoration: TextDecoration.none,
-                                        fontFamily: 'Palanquin',
-                                        color: Colors.black,
-                                        fontSize: 35),
-                                  ),
-                                  Text(
-                                    '243529',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        decoration: TextDecoration.none,
-                                        fontFamily: 'Palanquin',
-                                        color: Color.fromRGBO(49, 185, 228, 1),
-                                        fontSize: 35),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Icon(Icons.hourglass_empty_rounded, size: 50),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Payment Pending',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            decoration: TextDecoration.none,
-                                            fontFamily: 'Palanquin',
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 20),
-                                      ),
-                                      Text(
-                                        'Lorem ipsum dolor sit amet ipsum dolor sit amet ',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            decoration: TextDecoration.none,
-                                            fontFamily: 'Palanquin',
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 12),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Icon(Icons.calendar_month_rounded, size: 50),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Scheduled',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            decoration: TextDecoration.none,
-                                            fontFamily: 'Palanquin',
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 20),
-                                      ),
-                                      Text(
-                                        'Lorem ipsum dolor sit amet ipsum dolor sit amet ',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            decoration: TextDecoration.none,
-                                            fontFamily: 'Palanquin',
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 12),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Icon(Icons.delivery_dining_rounded, size: 50),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'On The Way',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            decoration: TextDecoration.none,
-                                            fontFamily: 'Palanquin',
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 20),
-                                      ),
-                                      Text(
-                                        'Lorem ipsum dolor sit amet ipsum dolor sit amet ',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            decoration: TextDecoration.none,
-                                            fontFamily: 'Palanquin',
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 12),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Icon(Icons.local_car_wash_rounded, size: 50),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Cleaning Up',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            decoration: TextDecoration.none,
-                                            fontFamily: 'Palanquin',
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 20),
-                                      ),
-                                      Text(
-                                        'Lorem ipsum dolor sit amet ipsum dolor sit amet ',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            decoration: TextDecoration.none,
-                                            fontFamily: 'Palanquin',
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 12),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Icon(Icons.check_circle, size: 50),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Clean Up Done',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            decoration: TextDecoration.none,
-                                            fontFamily: 'Palanquin',
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 20),
-                                      ),
-                                      Text(
-                                        'Lorem ipsum dolor sit amet ipsum dolor sit amet ',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            decoration: TextDecoration.none,
-                                            fontFamily: 'Palanquin',
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 12),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          )),
                     ),
-                    SizedBox(height: 10),
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Address: ',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  fontFamily: 'Palanquin',
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 13),
-                            ),
-                            Text(
-                              '2010 Piy Margal St., Sampaloc, Manila',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  fontFamily: 'Palanquin',
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 12),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Booking Date and Time: ',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  fontFamily: 'Palanquin',
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 13),
-                            ),
-                            Text(
-                              '2/23/2023 @ 8:00 AM',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  fontFamily: 'Palanquin',
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 12),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Washing Date and Time: ',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  fontFamily: 'Palanquin',
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 13),
-                            ),
-                            Text(
-                              '2/23/2023 @ 10:00 AM',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  fontFamily: 'Palanquin',
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 12),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Payment Option: ',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  fontFamily: 'Palanquin',
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 13),
-                            ),
-                            Text(
-                              'Cash',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  fontFamily: 'Palanquin',
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 12),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            print("Tapped Next");
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const paymentPending(
-                                  title: 'Tap2Wash',
-                                )));
-                          },
-                          child: Card(
-                            margin: const EdgeInsets.only(right: 20),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.0),
-                            ),
-                            color: const Color.fromRGBO(49, 185, 228, 1),
-                            child: SizedBox(
-                                width: 100,
-                                height: 40,
-                                child: Row(
-                                  children: const <Widget>[
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Icon(
-                                      Icons.play_arrow_sharp,
-                                      color: Colors.white,
-                                    ),
-                                    Text(
-                                      'NEXT',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          decoration: TextDecoration.none,
-                                          fontFamily: 'Palanquin',
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white,
-                                          fontSize: 20),
-                                    ),
-                                  ],
-                                )),
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            )
-          ],
-        )
-
-        );
+                  )
+                ],
+              ),
+            ],
+          ));
+    });
   }
 }

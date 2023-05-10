@@ -24,17 +24,17 @@ class _HomeTimeButtonState extends State<HomeTimeButton> {
         child: Card(
           color: widget.selected ? Color.fromRGBO(49, 185, 228, 1) : null,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
+            borderRadius: BorderRadius.circular(5.0),
             side: const BorderSide(
-              color: Colors.black,
+              color: Colors.grey,
               width: 1.0,
             ),
             // widget.selected ?
             // Color.fromRGBO(49, 185, 228, 1) : Color.fromRGBO(255, 255, 255, 1),
           ),
           child: SizedBox(
-              width: 120,
-              height: 60,
+              width: 90,
+              height: 50,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -44,9 +44,9 @@ class _HomeTimeButtonState extends State<HomeTimeButton> {
                     style: TextStyle(
                         decoration: TextDecoration.none,
                         fontFamily: 'Palanquin',
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
-                        fontSize: 20),
+                        fontWeight: FontWeight.w700,
+                        color: widget.selected ? Colors.white : Colors.black,
+                        fontSize: 16),
                   ),
                 ],
               )),

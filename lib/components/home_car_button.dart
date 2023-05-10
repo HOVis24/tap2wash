@@ -5,12 +5,12 @@ class HomeCarButton extends StatefulWidget {
       {super.key,
       required this.onTap,
       required this.selected,
-      required this.icon,
+      required this.image,
       required this.title});
 
   final bool selected;
-  final Icon icon;
   final String title;
+  final String image;
 
   // final String summary;
   final Function()? onTap;
@@ -27,41 +27,21 @@ class _HomeCarButtonState extends State<HomeCarButton> {
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
-          side: const BorderSide(
-            color: Colors.black,
+          side: BorderSide(
+            color: widget.selected
+                ? Color.fromRGBO(49, 185, 228, 1)
+                : Color.fromRGBO(245, 245, 245, 1),
             width: 1.0,
           ),
         ),
-        color: const Color.fromRGBO(224, 251, 252, 1),
+        color: Colors.white,
         child: SizedBox(
-            width: 165,
-            height: 125,
+            width: 180,
+            height: 140,
             child: Column(
               children: <Widget>[
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    widget.selected
-                        ? Icon(Icons.check_box_rounded)
-                        : Icon(Icons.check_box_outline_blank_rounded),
-                    SizedBox(
-                      width: 10,
-                    )
-                  ],
-                ),
-                widget.icon,
-                Text(
-                  widget.title,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      decoration: TextDecoration.none,
-                      fontFamily: 'Palanquin',
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
-                      fontSize: 15),
+                Expanded(
+                  child: Image.asset(widget.image),
                 ),
               ],
             )),

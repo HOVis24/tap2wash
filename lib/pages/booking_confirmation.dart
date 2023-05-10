@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
-import 'package:tap2wash/pages/booking_details.dart';
 import 'package:tap2wash/main.dart';
+import 'package:tap2wash/pages/booking_details.dart';
+import 'package:tap2wash/pages/pick_service.dart';
+import 'package:tap2wash/pages/user_profile.dart';
 
 import '../app_state_model.dart';
 import '../components/home_booking_confirmation.dart';
@@ -14,6 +18,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: '/second',
+      routes: {
+        '/first': (context) => const MyHomePage(title: 'Tap2Wash'),
+        '/second': (context) => const pickService(title: 'Tap2Wash'),
+        '/third': (context) => const userProfile(title: 'Tap2Wash'),
+      },
       title: 'Tap2Wash',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -34,7 +44,12 @@ class bookingConfirmation extends StatefulWidget {
 
 class _bookingConfirmation extends State<bookingConfirmation> {
   late MediaQueryData queryData;
+
+  //This is for the service buttons!
   int selectedIndex = 0;
+
+  //This is for the BottomNavBar routes!
+  int _selectedIndex = 1;
 
   @override
   void initState() {
@@ -49,78 +64,57 @@ class _bookingConfirmation extends State<bookingConfirmation> {
     return Consumer<AppStateModel>(builder: (context, model, child) {
       List<Widget> list = [
         HomeBookingConfirmation(
-          onTap: () {
-            setState(() {
-              selectedIndex = 0;
-            });
-          },
           selected: selectedIndex == 0,
-          title: model.service,
-        ),
-        HomeBookingConfirmation(
-          onTap: () {
-            setState(() {
-              selectedIndex = 1;
-            });
-          },
-          selected: selectedIndex == 1,
-          title: model.car,
-        ),
-        HomeBookingConfirmation(
-          onTap: () {
-            setState(() {
-              selectedIndex = 1;
-            });
-          },
-          selected: selectedIndex == 1,
-          title: model.address,
-        ),
-        HomeBookingConfirmation(
-          onTap: () {
-            setState(() {
-              selectedIndex = 4;
-            });
-          },
-          selected: selectedIndex == 4,
-          title: model.date,
-        ),
-        HomeBookingConfirmation(
-          onTap: () {
-            setState(() {
-              selectedIndex = 2;
-            });
-          },
-          selected: selectedIndex == 2,
-          title: model.time,
-        ),
-        HomeBookingConfirmation(
-          onTap: () {
-            setState(() {
-              selectedIndex = 3;
-            });
-          },
-          selected: selectedIndex == 3,
-          title: model.payment ,
+          service: model.service,
+          car: model.car,
+          address: model.address,
+          date: model.date,
+          time: model.time,
+          payment: model.payment,
         ),
       ];
 
       return Scaffold(
-          appBar: AppBar(
-            // Here we take the value from the MyHomePage object that was created by
-            // the App.build method, and use it to set our appbar title.
-            backgroundColor: const Color.fromRGBO(49, 185, 228, 1),
-            toolbarHeight: 70,
-            title: Text(widget.title),
-            centerTitle: true,
-            titleTextStyle: const TextTheme(
-              headline6: TextStyle(
-                // headline6 is used for setting title's theme
-                color: Colors.white,
-                fontSize: 36,
-                fontFamily: 'Palanquin',
-                fontWeight: FontWeight.w600,
+          bottomNavigationBar: BottomNavigationBar(
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                  icon: SvgPicture.asset('assets/images/home_btn.svg'),
+                  label: 'Home'),
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  'assets/images/book_service_btn.svg',
+                ),
+                label: 'Book a Service',
               ),
-            ).headline6,
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset('assets/images/profile_btn.svg'),
+                label: 'Profile',
+              ),
+            ],
+            currentIndex: _selectedIndex,
+            selectedItemColor: Colors.blue,
+            onTap: (index) {
+              switch (index) {
+                case 0:
+                  Navigator.pushNamed(context, "/first");
+                  break;
+                case 1:
+                  Navigator.pushNamed(context, "/second");
+                  break;
+                case 2:
+                  Navigator.pushNamed(context, "/third");
+                  break;
+              }
+            },
+          ),
+          appBar: AppBar(
+            backgroundColor: const Color.fromRGBO(224, 251, 252, 1),
+            toolbarHeight: 80,
+            title: Image.asset(
+              'assets/images/tap2wash_logo_2.png',
+              scale: 1.3,
+            ),
+            centerTitle: true,
           ),
           drawer: Drawer(
             child: SideBar(),
@@ -134,74 +128,76 @@ class _bookingConfirmation extends State<bookingConfirmation> {
               ),
               Column(
                 children: <Widget>[
-                  const SizedBox(height: 20),
                   Align(
                     alignment: Alignment.topLeft,
-                    child: Container(
-                      margin: const EdgeInsets.only(left: 20, top: 50),
-                      child: const Text(
-                        'Confirm Booking:',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            decoration: TextDecoration.none,
-                            fontFamily: 'Palanquin',
-                            fontWeight: FontWeight.w700,
-                            color: Color.fromRGBO(49, 185, 228, 1),
-                            fontSize: 40),
-                      ),
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(left: 15.0, top: 5, bottom: 5),
+                      child: GestureDetector(
+                          child: SvgPicture.asset(
+                            'assets/images/back_btn.svg',
+                          ),
+                          onTap: () => Navigator.pop(context)),
                     ),
                   ),
-                  Wrap(children: list, runSpacing: 10, spacing: 10),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      GestureDetector(
+                  LinearPercentIndicator(
+                    width: queryData.size.width,
+                    lineHeight: 5.0,
+                    percent: 0.90,
+                    backgroundColor: Colors.grey,
+                    progressColor: Color.fromRGBO(49, 185, 228, 1),
+                    linearStrokeCap: LinearStrokeCap.roundAll,
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, top: 30, bottom: 15),
+                    child: Align(
+                        alignment: Alignment.topLeft,
+                        child: SvgPicture.asset(
+                          'assets/images/review_icon.svg',
+                        )),
+                  ),
+                  Wrap(children: list),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15.0),
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: GestureDetector(
                         onTap: () {
                           print("Tapped Next");
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                              const bookingDetails(
-                                title: 'Tap2Wash',
-                              )));
+                              builder: (context) => const BookingDetails(
+                                    title: 'Tap2Wash',
+                                  )));
                         },
                         child: Card(
-                          margin: const EdgeInsets.only(right: 20),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                          color: const Color.fromRGBO(49, 185, 228, 1),
+                          color: const Color.fromRGBO(236, 250, 255, 1),
                           child: SizedBox(
-                              width: 140,
-                              height: 40,
+                              width: 180,
+                              height: 45,
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: const <Widget>[
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Icon(
-                                    Icons.check_circle_outline,
-                                    color: Colors.white,
-                                  ),
                                   Text(
-                                    ' CONFIRM',
+                                    'Confirm',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         decoration: TextDecoration.none,
                                         fontFamily: 'Palanquin',
                                         fontWeight: FontWeight.w600,
-                                        color: Colors.white,
+                                        color: Color.fromRGBO(49, 185, 228, 1),
                                         fontSize: 20),
                                   ),
                                 ],
                               )),
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    ),
+                  )
                 ],
               ),
             ],
           ));
-    });}
+    });
   }
+}

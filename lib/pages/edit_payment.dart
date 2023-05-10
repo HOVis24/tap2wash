@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tap2wash/main.dart';
 import 'package:tap2wash/pages/payment_options.dart';
+import 'package:tap2wash/pages/pick_service.dart';
+import 'package:tap2wash/pages/user_profile.dart';
 
 import '../components/sidebar.dart';
 
@@ -11,6 +14,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: '/third',
+      routes: {
+        '/first': (context) => const MyHomePage(title: 'Tap2Wash'),
+        '/second': (context) => const pickService(title: 'Tap2Wash'),
+        '/third': (context) => const userProfile(title: 'Tap2Wash'),
+      },
       title: 'Tap2Wash',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -31,29 +40,57 @@ class editPayment extends StatefulWidget {
 
 class _editPayment extends State<editPayment> {
   late MediaQueryData queryData;
+  //This is for the service buttons!
   int selectedIndex = 0;
+  //This is for the BottomNavBar routes!
+  int _selectedIndex = 2;
 
   @override
   Widget build(BuildContext context) {
     queryData = MediaQuery.of(context);
 
     return Scaffold(
-        appBar: AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          backgroundColor: const Color.fromRGBO(49, 185, 228, 1),
-          toolbarHeight: 70,
-          title: Text(widget.title),
-          centerTitle: true,
-          titleTextStyle: const TextTheme(
-            headline6: TextStyle(
-              // headline6 is used for setting title's theme
-              color: Colors.white,
-              fontSize: 36,
-              fontFamily: 'Palanquin',
-              fontWeight: FontWeight.w600,
+        resizeToAvoidBottomInset: false,
+        bottomNavigationBar: BottomNavigationBar(
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+                icon: SvgPicture.asset('assets/images/home_btn.svg'),
+                label: 'Home'),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                'assets/images/book_service_btn.svg',
+              ),
+              label: 'Book a Service',
             ),
-          ).headline6,
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/images/profile_btn.svg'),
+              label: 'Profile',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.blue,
+          onTap: (index) {
+            switch (index) {
+              case 0:
+                Navigator.pushNamed(context, "/first");
+                break;
+              case 1:
+                Navigator.pushNamed(context, "/second");
+                break;
+              case 2:
+                Navigator.pushNamed(context, "/third");
+                break;
+            }
+          },
+        ),
+        appBar: AppBar(
+          backgroundColor: const Color.fromRGBO(224, 251, 252, 1),
+          toolbarHeight: 80,
+          title: Image.asset(
+            'assets/images/tap2wash_logo_2.png',
+            scale: 1.3,
+          ),
+          centerTitle: true,
         ),
         drawer: Drawer(
           child: SideBar(),
@@ -67,31 +104,33 @@ class _editPayment extends State<editPayment> {
             ),
             Column(
               children: <Widget>[
+                SizedBox(
+                  height: 10,
+                ),
                 Align(
                   alignment: Alignment.center,
                   child: Container(
-                    margin: const EdgeInsets.only(top: 20),
                     child: const Text(
                       'EDIT INFORMATION',
                       style: TextStyle(
                           decoration: TextDecoration.none,
                           fontFamily: 'Palanquin',
                           fontWeight: FontWeight.w700,
-                          color: Color.fromRGBO(49, 185, 228, 1),
+                          color: Colors.black,
                           fontSize: 25),
                     ),
                   ),
                 ),
                 Card(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
+                    borderRadius: BorderRadius.circular(5.0),
                     side: const BorderSide(
                       color: Colors.black,
                       width: 1.0,
                     ),
                   ),
                   child: SizedBox(
-                      width: 355,
+                      width: 350,
                       height: 100,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -102,7 +141,7 @@ class _editPayment extends State<editPayment> {
                               Icon(Icons.camera, size: 50),
                               SizedBox(),
                               Column(
-                                children: [
+                                children: const [
                                   Text(
                                     'GCash',
                                     textAlign: TextAlign.start,
@@ -140,22 +179,24 @@ class _editPayment extends State<editPayment> {
                         ],
                       )),
                 ),
+                SizedBox(
+                  height: 20,
+                ),
                 Card(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
+                    borderRadius: BorderRadius.circular(5.0),
                     side: const BorderSide(
                       color: Colors.black,
                       width: 1.0,
                     ),
                   ),
                   child: SizedBox(
-                      width: 355,
-                      height: 320,
+                      width: 350,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Column(
-                            children: [
+                            children: const [
                               Text(
                                 'BANK',
                                 textAlign: TextAlign.start,
@@ -167,9 +208,13 @@ class _editPayment extends State<editPayment> {
                                     fontSize: 15),
                               ),
                               TextField(
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Enter bank name',
+                                decoration: InputDecoration(
+                                  hintText: 'Bank Name',
+                                  hintStyle: TextStyle(
+                                      decoration: TextDecoration.none,
+                                      fontFamily: 'Palanquin',
+                                      color: Colors.black,
+                                      fontSize: 15),
                                 ),
                               ),
                               Text(
@@ -182,9 +227,13 @@ class _editPayment extends State<editPayment> {
                                     fontSize: 15),
                               ),
                               TextField(
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Enter name',
+                                decoration: InputDecoration(
+                                  hintText: 'Account Name',
+                                  hintStyle: TextStyle(
+                                      decoration: TextDecoration.none,
+                                      fontFamily: 'Palanquin',
+                                      color: Colors.black,
+                                      fontSize: 15),
                                 ),
                               ),
                               Text(
@@ -197,9 +246,13 @@ class _editPayment extends State<editPayment> {
                                     fontSize: 15),
                               ),
                               TextField(
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Enter account number',
+                                decoration: InputDecoration(
+                                  hintText: 'Account Number',
+                                  hintStyle: TextStyle(
+                                      decoration: TextDecoration.none,
+                                      fontFamily: 'Palanquin',
+                                      color: Colors.black,
+                                      fontSize: 15),
                                 ),
                               ),
                             ],
@@ -215,37 +268,29 @@ class _editPayment extends State<editPayment> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        print("Tapped Back");
+                        print("Tapped Next");
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => const paymentOptions(
                                   title: 'Tap2Wash',
                                 )));
                       },
                       child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                        color: const Color.fromRGBO(74, 83, 151, 1),
+                        color: const Color.fromRGBO(236, 250, 255, 1),
                         child: SizedBox(
-                            width: 130,
+                            width: 100,
                             height: 45,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: const <Widget>[
-                                Icon(
-                                  Icons.keyboard_return_rounded,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
                                 Text(
-                                  ' GO BACK',
+                                  'GO BACK',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       decoration: TextDecoration.none,
                                       fontFamily: 'Palanquin',
                                       fontWeight: FontWeight.w600,
-                                      color: Colors.white,
-                                      fontSize: 15),
+                                      color: Color.fromRGBO(49, 185, 228, 1),
+                                      fontSize: 16),
                                 ),
                               ],
                             )),
@@ -253,42 +298,34 @@ class _editPayment extends State<editPayment> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        print("Tapped Confirm");
+                        print("Tapped Next");
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => const paymentOptions(
                                   title: 'Tap2Wash',
                                 )));
                       },
                       child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                        color: const Color.fromRGBO(49, 185, 228, 1),
+                        color: const Color.fromRGBO(236, 250, 255, 1),
                         child: SizedBox(
-                            width: 130,
+                            width: 100,
                             height: 45,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: const <Widget>[
-                                Icon(
-                                  Icons.edit_note_rounded,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
                                 Text(
-                                  ' CONFIRM',
+                                  'CONFIRM',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       decoration: TextDecoration.none,
                                       fontFamily: 'Palanquin',
                                       fontWeight: FontWeight.w600,
-                                      color: Colors.white,
-                                      fontSize: 15),
+                                      color: Color.fromRGBO(49, 185, 228, 1),
+                                      fontSize: 16),
                                 ),
                               ],
                             )),
                       ),
-                    ),
+                    )
                   ],
                 ),
               ],

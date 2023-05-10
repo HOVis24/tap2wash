@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:place_picker/place_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:tap2wash/app_state_model.dart';
 import 'package:tap2wash/main.dart';
 import 'package:tap2wash/pages/pick_date.dart';
-import 'package:place_picker/place_picker.dart';
+import 'package:tap2wash/pages/pick_service.dart';
+import 'package:tap2wash/pages/user_profile.dart';
+
 import '../components/sidebar.dart';
-import 'package:provider/provider.dart';
 
 class picKLocation extends StatelessWidget {
   const picKLocation({super.key});
@@ -13,6 +18,12 @@ class picKLocation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: '/second',
+      routes: {
+        '/first': (context) => const MyHomePage(title: 'Tap2Wash'),
+        '/second': (context) => const pickService(title: 'Tap2Wash'),
+        '/third': (context) => const userProfile(title: 'Tap2Wash'),
+      },
       title: 'Tap2Wash',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -45,207 +56,200 @@ class _pickLocation extends State<pickLocation> {
     queryData = MediaQuery.of(context);
     var locInput = TextEditingController();
     dynamic customLocation = locInput;
+    int selectedIndex = 0;
+    int _selectedIndex = 1;
 
-
-    return Consumer<AppStateModel>(builder: (context, model, child){
-
+    return Consumer<AppStateModel>(builder: (context, model, child) {
       void showPlacePicker() async {
-        LocationResult? result = await Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => PlacePicker("AIzaSyDiwjpaj_nJk_b2Lln0w3onLIw8U_PvbFo", )));
-        print(result!.formattedAddress.toString());
-        print(result.latLng.toString());
-        locInput.text = result.formattedAddress.toString();
+        LocationResult? result =
+            await Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => PlacePicker(
+                      "AIzaSyDiwjpaj_nJk_b2Lln0w3onLIw8U_PvbFo",
+                    )));
+        print(result!.name.toString());
+        locInput.text = result.name.toString();
         model.setAddress(pickedAddress: locInput.text);
       }
 
-    return Scaffold(
-        appBar: AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          backgroundColor: const Color.fromRGBO(49, 185, 228, 1),
-          toolbarHeight: 70,
-          title: Text(widget.title),
-          centerTitle: true,
-          titleTextStyle: const TextTheme(
-            headline6: TextStyle(
-              // headline6 is used for setting title's theme
-              color: Colors.white,
-              fontSize: 36,
-              fontFamily: 'Palanquin',
-              fontWeight: FontWeight.w600,
+      return Scaffold(
+          bottomNavigationBar: BottomNavigationBar(
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                  icon: SvgPicture.asset('assets/images/home_btn.svg'),
+                  label: 'Home'),
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  'assets/images/book_service_btn.svg',
+                ),
+                label: 'Book a Service',
+              ),
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset('assets/images/profile_btn.svg'),
+                label: 'Profile',
+              ),
+            ],
+            currentIndex: _selectedIndex,
+            selectedItemColor: Colors.blue,
+            onTap: (index) {
+              switch (index) {
+                case 0:
+                  Navigator.pushNamed(context, "/first");
+                  break;
+                case 1:
+                  Navigator.pushNamed(context, "/second");
+                  break;
+                case 2:
+                  Navigator.pushNamed(context, "/third");
+                  break;
+              }
+            },
+          ),
+          appBar: AppBar(
+            backgroundColor: const Color.fromRGBO(224, 251, 252, 1),
+            toolbarHeight: 80,
+            title: Image.asset(
+              'assets/images/tap2wash_logo_2.png',
+              scale: 1.3,
             ),
-          ).headline6,
-        ),
-        drawer: Drawer(
-          child: SideBar(),
-        ),
-        body: Stack(
-          children: <Widget>[
-            Container(
-              width: queryData.size.width,
-              height: queryData.size.height,
-              decoration: const BoxDecoration(color: Colors.white),
-            ),
-            Column(
-              children: <Widget>[
-                const SizedBox(height: 20),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 20, top: 50),
-                    child: const Text(
-                      'Select location:',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          decoration: TextDecoration.none,
-                          fontFamily: 'Palanquin',
-                          fontWeight: FontWeight.w700,
-                          color: Color.fromRGBO(49, 185, 228, 1),
-                          fontSize: 40),
+            centerTitle: true,
+          ),
+          drawer: Drawer(
+            child: SideBar(),
+          ),
+          body: Stack(
+            children: <Widget>[
+              Container(
+                width: queryData.size.width,
+                height: queryData.size.height,
+                decoration: const BoxDecoration(color: Colors.white),
+              ),
+              Column(
+                children: <Widget>[
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(left: 15.0, top: 5, bottom: 5),
+                      child: GestureDetector(
+                          child: SvgPicture.asset(
+                            'assets/images/back_btn.svg',
+                          ),
+                          onTap: () => Navigator.pop(context)),
                     ),
                   ),
-                ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                //   children: <Widget>[
-                //     Card(
-                //       shape: RoundedRectangleBorder(
-                //         borderRadius: BorderRadius.circular(15.0),
-                //       ),
-                //       color: const Color.fromRGBO(244, 243, 243, 1),
-                //       child: SizedBox(
-                //           width: 355,
-                //           height: 40,
-                //           child: Row(
-                //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                //             children: const <Widget>[
-                //               SizedBox(),
-                //               Icon(Icons.search_sharp),
-                //               SizedBox(),
-                //               Text(
-                //                 '2010 Piy Margal St., Sampaloc, Manila',
-                //                 textAlign: TextAlign.center,
-                //                 style: TextStyle(
-                //                     decoration: TextDecoration.none,
-                //                     fontFamily: 'Palanquin',
-                //                     fontWeight: FontWeight.w600,
-                //                     color: Colors.black,
-                //                     fontSize: 15),
-                //               ),
-                //               SizedBox(),
-                //             ],
-                //           )),
-                //     ),
-                //   ],
-                // ),
-                SizedBox(
-                  width: queryData.size.width - 30,
-                  height: 80,
-                  child: GestureDetector(
-                    child: Card(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(color: Color.fromRGBO(226, 226, 226, 1)),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Icon(
-                            Icons.pin_drop_outlined,
-                            color: Color.fromRGBO(129, 129, 129, 1),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          SizedBox(
-                            width: 300,
-                            child: TextField(
-                              readOnly: true,
-                              controller: locInput,
-                              onTap: (){
-                                showPlacePicker();
-
-                                // setState(() {
-                                //   model.setAddress(pickedAddress: locInput.text);
-                                //   print(locInput);
-                                // });
-                              },
-
-                              decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText:  'Pickup Point:',
-                                  hintStyle: TextStyle(
-                                      color: Color.fromRGBO(129, 129, 129, 1),
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.w300,
-                                      fontFamily: 'Lato-Thin'
-                                  )
-                              ),
-                              style: TextStyle(
-                                  color: Color.fromRGBO(129, 129, 129, 1),
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.w300,
-                                  fontFamily: 'Lato-Thin'),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  LinearPercentIndicator(
+                    width: queryData.size.width,
+                    lineHeight: 5.0,
+                    percent: 0.45,
+                    backgroundColor: Colors.grey,
+                    progressColor: const Color.fromRGBO(49, 185, 228, 1),
+                    linearStrokeCap: LinearStrokeCap.roundAll,
                   ),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        print("Tapped Next");
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const pickDate(
-                                  title: 'Tap2Wash',
-                                )));
-                      },
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, top: 5, bottom: 5),
+                    child: Align(
+                        alignment: Alignment.topLeft,
+                        child: SvgPicture.asset(
+                          'assets/images/location_icon.svg',
+                        )),
+                  ),
+                  SizedBox(
+                    width: queryData.size.width - 30,
+                    height: 80,
+                    child: GestureDetector(
                       child: Card(
-                        margin: const EdgeInsets.only(right: 20),
+                        color: Colors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
+                          side: const BorderSide(
+                              color: Color.fromRGBO(226, 226, 226, 1)),
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        color: const Color.fromRGBO(49, 185, 228, 1),
-                        child: SizedBox(
-                            width: 100,
-                            height: 40,
-                            child: Row(
-                              children: const <Widget>[
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Icon(
-                                  Icons.play_arrow_sharp,
-                                  color: Colors.white,
-                                ),
-                                Text(
-                                  'NEXT',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      decoration: TextDecoration.none,
-                                      fontFamily: 'Palanquin',
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white,
-                                      fontSize: 20),
-                                ),
-                              ],
-                            )),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(left: 15, right: 5),
+                              child: Icon(
+                                Icons.search,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 300,
+                              child: TextField(
+                                readOnly: true,
+                                controller: locInput,
+                                onTap: () {
+                                  showPlacePicker();
+                                  // setState(() {
+                                  //   model.setAddress(pickedAddress: locInput.text);
+                                  //   print(locInput);
+                                  // });
+                                },
+                                decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: 'Pickup Point:',
+                                    hintStyle: TextStyle(
+                                        color: Color.fromRGBO(129, 129, 129, 1),
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: 'Palanquin')),
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Palanquin'),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ));
-  });}
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 30),
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: GestureDetector(
+                        onTap: () {
+                          print("Tapped Next");
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const pickDate(
+                                    title: 'Tap2Wash',
+                                  )));
+                        },
+                        child: Card(
+                          color: const Color.fromRGBO(236, 250, 255, 1),
+                          child: SizedBox(
+                              width: 90,
+                              height: 45,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const <Widget>[
+                                  Text(
+                                    'NEXT',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        decoration: TextDecoration.none,
+                                        fontFamily: 'Palanquin',
+                                        fontWeight: FontWeight.w600,
+                                        color: Color.fromRGBO(49, 185, 228, 1),
+                                        fontSize: 20),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_forward,
+                                    color: Color.fromRGBO(49, 185, 228, 1),
+                                  )
+                                ],
+                              )),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ));
+    });
+  }
 }

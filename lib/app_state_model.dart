@@ -1,8 +1,6 @@
 import 'package:flutter/foundation.dart' as foundation;
 
 class AppStateModel extends foundation.ChangeNotifier {
-
-
   void initialize() {
     //
   }
@@ -15,7 +13,7 @@ class AppStateModel extends foundation.ChangeNotifier {
   dynamic date;
   dynamic address;
 
-  dynamic get getService{
+  dynamic get getService {
     return service;
   }
 
@@ -30,11 +28,11 @@ class AppStateModel extends foundation.ChangeNotifier {
     notifyListeners();
   }
 
-    setCar({required String pickedCar}) {
-      car = pickedCar;
-      print(car);
-      notifyListeners();
-    }
+  setCar({required String pickedCar}) {
+    car = pickedCar;
+    print(car);
+    notifyListeners();
+  }
 
   setTime({required String pickedTime}) {
     time = pickedTime;
@@ -53,10 +51,10 @@ class AppStateModel extends foundation.ChangeNotifier {
     print(date);
     notifyListeners();
   }
+
   setAddress({required String pickedAddress}) {
     address = pickedAddress;
     print(address);
     notifyListeners();
   }
-  }
-
+}
